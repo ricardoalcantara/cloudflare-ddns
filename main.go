@@ -11,10 +11,17 @@ import (
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/go-co-op/gocron"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	logLevel, err := zerolog.ParseLevel(os.Getenv("LOG_LEVEL"))
+	if err != nil {
+		log.Fatal().Err(err).Send()
+	}
+	zerolog.SetGlobalLevel(logLevel)
+
 	log.Info().Msg("Started")
 	log.Info().Str("Interval", os.Getenv("INTERVAL")).Send()
 
@@ -33,7 +40,6 @@ func mainJob() {
 
 	log.Debug().Str("ipv4", ipv4).Str("ipv6", ipv6).Send()
 
-	return
 	updateRecords(ipv4, ipv6)
 }
 

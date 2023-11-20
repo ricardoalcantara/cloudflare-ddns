@@ -14,6 +14,7 @@ Environment=INTERVAL=1h
 # the domain mane
 Environment=ZONE_NAME=
 Environment=CLOUDFLARE_API_TOKEN=
+Environment=LOG_LEVEL=debug
 
 [Install]
 WantedBy=multi-user.target
