@@ -88,24 +88,32 @@ func updateRecords(ipv4, ipv6 string) error {
 			for _, dnsRecord := range dnsRecords {
 				switch dnsRecord.Type {
 				case "A":
-					_, err := api.UpdateDNSRecord(ctx, &resourceContainer, cloudflare.UpdateDNSRecordParams{
-						ID:      dnsRecord.ID,
-						Content: ipv4,
-					})
-					if err != nil {
-						log.Error().Err(err).Msg("Could not update A record")
+					if dnsRecord.Content == ipv4 {
+						log.Info().Str("ipv4", ipv4).Msg("A record is up to date")
 					} else {
-						log.Info().Str("ipv4", ipv4).Msg("Updated A record")
+						_, err := api.UpdateDNSRecord(ctx, &resourceContainer, cloudflare.UpdateDNSRecordParams{
+							ID:      dnsRecord.ID,
+							Content: ipv4,
+						})
+						if err != nil {
+							log.Error().Err(err).Msg("Could not update A record")
+						} else {
+							log.Info().Str("ipv4", ipv4).Msg("Updated A record")
+						}
 					}
 				case "AAAA":
-					_, err := api.UpdateDNSRecord(ctx, &resourceContainer, cloudflare.UpdateDNSRecordParams{
-						ID:      dnsRecord.ID,
-						Content: ipv6,
-					})
-					if err != nil {
-						log.Error().Err(err).Msg("Could not update AAAA record")
+					if dnsRecord.Content == ipv6 {
+						log.Info().Str("ipv6", ipv6).Msg("AAAA record is up to date")
 					} else {
-						log.Info().Str("ipv6", ipv6).Msg("Updated AAAA record")
+						_, err := api.UpdateDNSRecord(ctx, &resourceContainer, cloudflare.UpdateDNSRecordParams{
+							ID:      dnsRecord.ID,
+							Content: ipv6,
+						})
+						if err != nil {
+							log.Error().Err(err).Msg("Could not update AAAA record")
+						} else {
+							log.Info().Str("ipv6", ipv6).Msg("Updated AAAA record")
+						}
 					}
 				}
 			}
